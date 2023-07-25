@@ -14,6 +14,34 @@ public class User {
     private String password;
     private List<Address> addresses;
 
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.email = email;
+        this.role = role;
+        this.dob = dob;
+        this.gender = gender;
+        this.password = password;
+    }
+
+    public User(int id, String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.email = email;
+        this.role = role;
+        this.dob = dob;
+        this.gender = gender;
+        this.password = password;
+    }
+
+
+
     public int getId() {
         return id;
     }
@@ -92,5 +120,21 @@ public class User {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", dob='" + dob + '\'' +
+                ", gender='" + gender + '\'' +
+                ", password='" + password + '\'' +
+                ", addresses=" + addresses +
+                '}';
     }
 }

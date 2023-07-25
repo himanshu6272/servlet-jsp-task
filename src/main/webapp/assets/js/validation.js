@@ -87,18 +87,18 @@ $(document).ready(function validate() {
       return true;
     }
   };
-  let resAddress = function () {
-    let address = $("#address").val();
-    if (address == "" || address == undefined) {
-      $("#addressHelp")
-        .html("please enter the address!")
-        .addClass("text-danger");
-      return false;
-    } else {
-      $("#addressHelp").empty();
-      return true;
-    }
-  };
+//  let resAddress = function () {
+//    let address = $("#address").val();
+//    if (address == "" || address == undefined) {
+//      $("#addressHelp")
+//        .html("please enter the address!")
+//        .addClass("text-danger");
+//      return false;
+//    } else {
+//      $("#addressHelp").empty();
+//      return true;
+//    }
+//  };
   let pwd = function () {
     let password = $("#password").val();
     let passwordExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
@@ -146,26 +146,10 @@ $(document).ready(function validate() {
       return true;
     }
   };
-   let role = function () {
-    let selectedRole = $(".role:checked").val();
-
-    if (selectedRole === undefined) {
-      $("#rolehelp").html("please select the role").addClass("text-danger");
-      return false;
-    } else {
-      $("#rolehelp").empty();
-      return true;
-    }
-  };
-
-
   $(".gender").click(function () {
+
       $("#genderHelp").empty();
   });
-  $(".role").click(function () {
-      $("#rolehelp").empty();
-  });
-
   $("#dob").datepicker({
     dateFormat: "yy-mm-dd",
     maxDate: 0,
@@ -187,20 +171,22 @@ $(document).ready(function validate() {
   $("#mobile-number").blur(mobileNumber);
   $("#email-address").blur(emailAddress);
   $("#dob").blur(dateOfBirth);
-  $("#address").blur(resAddress);
+//  $("#address").blur(resAddress);
   $("#password").blur(pwd);
   $("#password").blur(gender);
-  $("#password").blur(role);
   $("#cnf-password").blur(cnfPassword);
   $("#submit-btn").click(firstName);
   $("#submit-btn").click(lastName);
   $("#submit-btn").click(mobileNumber);
   $("#submit-btn").click(emailAddress);
   $("#submit-btn").click(dateOfBirth);
-  $("#submit-btn").click(resAddress);
+//  $("#submit-btn").click(resAddress);
   $("#submit-btn").click(pwd);
   $("#submit-btn").click(gender);
-  $("#submit-btn").click(role);
   $("#submit-btn").click(cnfPassword);
 
+
+
 });
+
+

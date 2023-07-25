@@ -2,11 +2,25 @@ package models;
 
 public class Address {
     private int id;
+    private int userId;
     private String street;
     private String city;
     private String state;
     private String zip;
     private String country;
+
+    public Address() {
+    }
+
+    public Address(int userId, String street, String city, String state, String zip, String country) {
+        this.userId = userId;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.country = country;
+    }
+
 
     public int getId() {
         return id;
@@ -54,5 +68,26 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
