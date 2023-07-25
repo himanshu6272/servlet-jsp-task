@@ -1,3 +1,18 @@
 <web-app>
-
+    <servlet>
+        <servlet-name>userController</servlet-name>
+        <servlet-class>controllers.UserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userController</servlet-name>
+        <url-pattern>/registerServlet</url-pattern>
+    </servlet-mapping>
+<servlet>
+        <servlet-name>addressController</servlet-name>
+        <servlet-class>controllers.AddressController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addressController</servlet-name>
+        <url-pattern>/addressServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
