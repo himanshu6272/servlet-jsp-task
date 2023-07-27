@@ -99,6 +99,19 @@ $(document).ready(function validate() {
 //      return true;
 //    }
 //  };
+
+  let securityQue = function () {
+    let answer = $("#security-que").val();
+    if (answer == "" || answer == undefined) {
+      $("#securityqueHelp")
+        .html("please enter the answer!")
+        .addClass("text-danger");
+      return false;
+    } else {
+      $("#securityqueHelp").empty();
+      return true;
+    }
+  };
   let pwd = function () {
     let password = $("#password").val();
     let passwordExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
@@ -135,6 +148,21 @@ $(document).ready(function validate() {
       return true;
     }
   };
+
+  let address = function(){
+    let length = $("#addresses").children("div").length;
+    if(length == 0){
+        $("#addressHelp")
+                .html("please add atleast one address!")
+                .addClass("text-danger");
+              return false;
+        }
+        else {
+            $("#addressHelp").empty();
+            return true;
+        }
+
+  }
   let gender = function () {
     let selectedGender = $(".gender:checked").val();
 
@@ -146,10 +174,23 @@ $(document).ready(function validate() {
       return true;
     }
   };
-  $(".gender").click(function () {
 
+  let role = function () {
+    let selectedRole = $(".role:checked").val();
+    if (selectedRole === undefined) {
+      $("#roleHelp").html("please select the role").addClass("text-danger");
+      return false;
+    } else {
+      $("#roleHelp").empty();
+      return true;
+    }
+  };
+
+
+  $(".gender").click(function () {
       $("#genderHelp").empty();
   });
+
   $("#dob").datepicker({
     dateFormat: "yy-mm-dd",
     maxDate: 0,
@@ -165,6 +206,39 @@ $(document).ready(function validate() {
     $("#dateHelp").empty();
   });
 
+//  let addresses = function(){
+//    let length = $("#addresses").children("div").length;
+//
+//    if(length == 0){
+//        return false;
+//    }else{
+//    for(let i=1; i<=length;i++){
+//    let addressClass = ".address"+i;
+//        let street = $("address1").find('[name="street"]');
+//        let city = $(addressClass).find('[name="city"]');
+//        let state = $(addressClass).find('[name="state"]');
+//        let zip = $(addressClass).find('[name="zip"]');
+//        let country = $(addressClass).find('[name="country"]');
+//
+//        if(street == "" || street == undefined ||city == "" || city == undefined ||state == "" || state == undefined ||zip == "" || zip == undefined ||country == "" || country == undefined )
+//        {
+//            $(addressClass).find(".addressesHelp").html("please select the gender").addClass("text-danger");
+//            return false;
+//        }else{
+//            $(addressClass).find(".addressesHelp").empty();
+//            return true;
+//        }
+//
+//
+//
+//    }
+//    }
+//
+//
+//  }
+
+
+
 
   $("#fname").blur(firstName);
   $("#lname").blur(lastName);
@@ -172,8 +246,8 @@ $(document).ready(function validate() {
   $("#email-address").blur(emailAddress);
   $("#dob").blur(dateOfBirth);
 //  $("#address").blur(resAddress);
+  $("#security-que").blur(securityQue);
   $("#password").blur(pwd);
-  $("#password").blur(gender);
   $("#cnf-password").blur(cnfPassword);
   $("#submit-btn").click(firstName);
   $("#submit-btn").click(lastName);
@@ -181,10 +255,13 @@ $(document).ready(function validate() {
   $("#submit-btn").click(emailAddress);
   $("#submit-btn").click(dateOfBirth);
 //  $("#submit-btn").click(resAddress);
+  $("#submit-btn").click(address);
+//  $("#submit-btn").click(addresses);
+  $("#submit-btn").click(securityQue);
   $("#submit-btn").click(pwd);
   $("#submit-btn").click(gender);
+  $("#submit-btn").click(role);
   $("#submit-btn").click(cnfPassword);
-
 
 
 });

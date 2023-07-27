@@ -24,7 +24,7 @@
   </div>
   <div class="row w-50 mx-auto">
     <div class="col w-75 bg-dark p-5 rounded-bottom">
-    <form class="border border-solid border-warning rounded-lg p-4 text-warning" method="post" onsubmit="return validate()">
+    <form action="loginServlet" class="border border-solid border-warning rounded-lg p-4 text-warning" method="post" onsubmit="return validate()">
             <div class="form-group">
               <label for="email-address">Email</label>
               <input type="text" class="form-control" id="email-address" placeholder="enter email" name="email">
@@ -37,12 +37,14 @@
             </div>
             <input type="submit" class="btn btn-outline-warning" id="submit-btn" value="Submit">
     </form>
+    <a href="forgot.jsp">Forgot Password</a>
+        <div class="text-center text-warning"><p class="d-inline">New user: &nbsp;</p><a href="register.jsp">create account</a> </div>
     </div>
   </div>
 </div>
 <%@ include file="footer.html" %>
 <script src="./assets/jquery/jQuery 3.6.4.js"></script>
-<script src="./assets/js/validation.js"></script>
+<script src="./assets/js/login.js"></script>
 <script src="./assets/jquery/jquery-ui.js"></script>
 </body>
 </html>

@@ -1,5 +1,15 @@
 $(document).ready(function() {
 
+    $("#login-btn").html("Logout").removeAttr("href").attr("href", "logoutServlet");
+    $("#register-btn").html("Update Profile").removeAttr("href").attr("href", "view.jsp");
+    $(".navbar-brand").addClass("d-none");
+    $("#dashboard-btn").removeClass("d-none");
+
+$(".remove-user-btn").click(function(){
+    $(this).closest("tr").remove();
+})
+
+
 $("#myInput").on("keyup", function(){
      var input, filter, table, tr, td, i, txtValue;
           input = document.getElementById("myInput");
@@ -18,6 +28,7 @@ $("#myInput").on("keyup", function(){
               }
             }
           }
+
 })
 
 })

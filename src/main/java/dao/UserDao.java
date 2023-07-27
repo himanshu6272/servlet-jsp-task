@@ -40,15 +40,23 @@ public class UserDao {
         return flag;
     }
 
-    public int getUserIdByEmail(String email){
-        int userId = 0;
+    public User getByEmail(String email){
+        User user = new User();
         try {
-            String query = "select user.id from user where email=?";
+            String query = "select * from user where email=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, email);
             ResultSet set = preparedStatement.executeQuery();
             if (set.next()){
-                userId = set.getInt(1);
+                user.setId(set.getInt(1));
+                user.setFirstName(set.getString(2));
+                user.setLastName(set.getString(3));
+                user.setMobile(set.getString(4));
+                user.setEmail(set.getString(5));
+                user.setRole(set.getString(6));
+                user.setGender(set.getString(7));
+                user.setDob(set.getString(8));
+                user.setPassword(set.getString(9));
             }
 
         }catch (Exception e){
@@ -56,7 +64,7 @@ public class UserDao {
         }
 
 
-        return userId;
+        return user;
     }
 
     public List<User> getAll(){
@@ -84,6 +92,77 @@ public class UserDao {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public User getById(int id){
+        User user = new User();
+        try {
+            String query = "select * from user where id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet set = preparedStatement.executeQuery();
+            if (set.next()){
+                user.setId(set.getInt(1));
+                user.setFirstName(set.getString(2));
+                user.setLastName(set.getString(3));
+                user.setMobile(set.getString(4));
+                user.setEmail(set.getString(5));
+                user.setRole(set.getString(6));
+                user.setGender(set.getString(7));
+                user.setDob(set.getString(8));
+                user.setPassword(set.getString(9));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return user;
+
+    }
+
+    public boolean update(User user){
+        boolean flag = false;
+
+        try {
+            String query = "update user set firstname=?, lastname=?, mobile=?, email=?, role=?, gender=?, dob=?, password=? where id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getMobile());
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(5, user.getRole());
+            preparedStatement.setString(6, user.getGender());
+            preparedStatement.setString(7, user.getDob());
+            preparedStatement.setString(8, user.getPassword());
+            preparedStatement.setInt(9, user.getId());
+
+
+
+            preparedStatement.executeUpdate();
+            flag = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
+    public boolean delete(int id){
+        boolean flag = false;
+
+        try {
+            String query = "delete from user where id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            flag = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return flag;
     }
 
 }

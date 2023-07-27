@@ -5,6 +5,8 @@ import models.Address;
 import org.apache.log4j.Logger;
 import utils.ConnectionProvider;
 
+import java.util.List;
+
 public class AddressServiceImpl implements AddressService{
 
     public static final Logger logger = Logger.getLogger(AddressServiceImpl.class);
@@ -16,5 +18,11 @@ public class AddressServiceImpl implements AddressService{
         }else {
             logger.info("something went wrong while savin address");
         }
+    }
+
+
+    public List<Address> getAddressByUserId(int userId) {
+        List<Address> addresses = this.addressDao.getByUserId(userId);
+        return addresses;
     }
 }

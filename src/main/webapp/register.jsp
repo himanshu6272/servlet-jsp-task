@@ -110,6 +110,7 @@
                 <div class="form-group">
                     <label class="d-block">Address</label>
                     <button type="button" class="btn btn-outline-primary" id="add-address-btn">Add Address</button>
+                    <small id="addressHelp" class="form-text"></small>
                     <div class="form-group w-100 d-none mt-3" id="address">
                         <input type="text" class="form-control mb-2" placeholder="Street" id="inputStreet" >
                         <input type="text" class="form-control mb-2" id="inputCity" placeholder="City" >
@@ -117,7 +118,7 @@
                         <input type="text" class="form-control mb-2" id="inputZip" placeholder="Zip" >
                         <input type="text" class="form-control " id="inputCountry" placeholder="County" >
                         <button type="button" class="btn btn-primary" id="save-address-btn">Add</button>
-                        <button type="button" class="btn btn-primary" id="done-address-btn">Done</button>
+                        <button type="button" class="btn btn-primary" id="cancel-address-btn">Cancel</button>
                     </div>
                     <div id="addresses"></div>
                 </div>
@@ -135,6 +136,12 @@
                         <small id="cnfpasswordHelp" class="form-text"></small>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="security-que">Security question: Who is your favourite Bollywood Star ?</label>
+                    <input type="text" class="form-control" id="security-que" placeholder="Enter answer here" name="security-que">
+                    <small id="securityqueHelp" class="form-text"></small>
+                </div>
+
                <input type="submit" value="Submit" class="btn btn-outline-primary form-control" id="submit-btn" />
             </form>
         </div>
