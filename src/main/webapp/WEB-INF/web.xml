@@ -15,4 +15,36 @@
         <servlet-name>addressController</servlet-name>
         <url-pattern>/addressServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>controllers.AuthController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>logoutServlet</servlet-name>
+        <servlet-class>controllers.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutServlet</servlet-name>
+        <url-pattern>/logoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>viewServlet</servlet-name>
+        <servlet-class>controllers.ViewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewServlet</servlet-name>
+        <url-pattern>/viewServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteUSerServlet</servlet-name>
+        <servlet-class>controllers.DeleteUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteUSerServlet</servlet-name>
+        <url-pattern>/deleteServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

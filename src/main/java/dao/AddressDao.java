@@ -4,6 +4,9 @@ import models.Address;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddressDao {
     private Connection connection;
@@ -32,6 +35,30 @@ public class AddressDao {
 
         return flag;
 
+    }
+
+    public List<Address> getByUserId(int userId){
+        List<Address> addresses = new ArrayList<>();
+        try {
+            String query = "select * from address where user_id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+            ResultSet set = preparedStatement.executeQuery();
+            while (set.next()){
+                Address address = new Address();
+                address.setStreet(set.getString(3));
+                address.setCity(set.getString(4));
+                address.setState(set.getString(5));
+                address.setZip(set.getString(6));
+                address.setCountry(set.getString(7));
+                addresses.add(address);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return addresses;
     }
 
 }
