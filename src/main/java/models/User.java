@@ -12,23 +12,14 @@ public class User {
     private String dob;
     private String gender;
     private String password;
-    private List<Address> addresses;
+    private String securityQuestion;
+    private String securityAnswer;
+    private String fileName;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobile = mobile;
-        this.email = email;
-        this.role = role;
-        this.dob = dob;
-        this.gender = gender;
-        this.password = password;
-    }
-
-    public User(int id, String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password) {
+    public User(int id, String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password, String securityQuestion, String securityAnswer, String fileName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,9 +29,56 @@ public class User {
         this.dob = dob;
         this.gender = gender;
         this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.fileName = fileName;
     }
 
+    public User(int id, String firstName, String lastName, String mobile, String role, String dob, String gender, String password, String securityQuestion, String securityAnswer, String fileName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.role = role;
+        this.dob = dob;
+        this.gender = gender;
+        this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.fileName = fileName;
+    }
 
+    public User(int id, String firstName, String lastName, String mobile, String dob, String gender, String password, String securityQuestion, String securityAnswer, String fileName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.dob = dob;
+        this.gender = gender;
+        this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.fileName = fileName;
+    }
+
+    public User(String firstName, String lastName, String mobile, String email, String role, String dob, String gender, String password, String securityQuestion, String securityAnswer, String fileName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.email = email;
+        this.role = role;
+        this.dob = dob;
+        this.gender = gender;
+        this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.fileName = fileName;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     public int getId() {
         return id;
@@ -114,15 +152,29 @@ public class User {
         this.password = password;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public String getSecurityQuestion() {
+        return securityQuestion;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setSecurityQuestion(String securityQuestion) {
+        this.securityQuestion = securityQuestion;
     }
 
-    @Override
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -134,7 +186,6 @@ public class User {
                 ", dob='" + dob + '\'' +
                 ", gender='" + gender + '\'' +
                 ", password='" + password + '\'' +
-                ", addresses=" + addresses +
                 '}';
     }
 }

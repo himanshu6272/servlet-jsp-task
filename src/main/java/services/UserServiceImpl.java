@@ -6,18 +6,30 @@ import models.User;
 import org.apache.log4j.Logger;
 import utils.ConnectionProvider;
 
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class UserServiceImpl implements UserService{
+
     public static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     public UserDao userDao = new UserDao(ConnectionProvider.getConnection());
-    public void registerUser(User user) {
+    public int registerUser(User user) {
+        int status = 0;
         if (userDao.saveUser(user)){
             logger.info("user saved successfully");
+            status = 1;
+
         }else {
             logger.error("something went wrong");
         }
+        return status;
     }
 
     public List<User> getAllUsers() {
@@ -43,6 +55,15 @@ public class UserServiceImpl implements UserService{
             logger.error("something went wrong");
         }
 
+    }
+
+
+    public void updateUserPassword(User user) {
+        if(this.userDao.updatePassword(user)){
+            logger.info("password changed successfully");
+        }else {
+            logger.error("something went wrong");
+        }
     }
 
     public void deleteUser(int id) {

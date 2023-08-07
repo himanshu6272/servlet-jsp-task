@@ -6,27 +6,21 @@
     <meta charset="UTF-8">
     <title>Title</title>
   <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
-  <style>
-  .div-cont {
-  min-height:81vh;
-  }
-  #myInput {
-    width: 50%;
-    font-size: 16px;
-    padding: 6px 20px 6px 40px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-left: 100px;
-  }
+      <link rel="stylesheet" href="./assets/css/style.css">
 
-</style>
 </head>
-<%
-    List<User> users = (List)request.getAttribute("users");
-    User admin = (User)request.getAttribute("admin");
-%>
+
 <body class="bg-warning">
-<%@ include file="header.html" %>
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store");
+    session.removeAttribute("updateUserId");
+    List<User> users = (List)session.getAttribute("users");
+    User admin = (User)session.getAttribute("admin");
+    if(users == null || admin == null){
+        response.sendRedirect("index.jsp");
+    }
+%>
+<%@ include file="header.jsp" %>
 <div class="container div-cont bg-secondary">
   <div class="row">
   <div class="bg-dark w-100 p-2">
@@ -48,8 +42,8 @@
         <td><c:out value="${user.getEmail()}" /></td>
         <td><c:out value="${user.getRole()}" /></td>
         <td class="w-25">
-        <a href="viewServlet?userId=${user.getId()}&role=${admin.getRole()}" class="btn btn-warning py-1 view-user-btn">View</a>
-        <a href="deleteServlet?userId=${user.getId()}" class="btn btn-warning py-1 remove-user-btn">Delete</a>
+        <a href="viewServlet?userId=${user.getId()}&role=${user.getRole()}&adminId=${admin.getId()}" class="btn btn-warning py-1 view-user-btn">View</a>
+        <a href="deleteServlet?userId=${user.getId()}&adminId=${admin.getId()}" class="btn btn-warning py-1 remove-user-btn">Delete</a>
         </td>
       </tr>
       </c:forEach>

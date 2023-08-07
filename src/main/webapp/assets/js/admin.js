@@ -1,7 +1,7 @@
 $(document).ready(function() {
-
     $("#login-btn").html("Logout").removeAttr("href").attr("href", "logoutServlet");
-    $("#register-btn").html("Update Profile").removeAttr("href").attr("href", "view.jsp");
+    $("#register-btn").addClass("d-none");
+    $("#update-profile-btn").removeClass("d-none");
     $(".navbar-brand").addClass("d-none");
     $("#dashboard-btn").removeClass("d-none");
 

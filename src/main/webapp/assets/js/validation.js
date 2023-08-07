@@ -101,14 +101,14 @@ $(document).ready(function validate() {
 //  };
 
   let securityQue = function () {
-    let answer = $("#security-que").val();
+    let answer = $("#security-answer").val();
     if (answer == "" || answer == undefined) {
-      $("#securityqueHelp")
+      $("#securityanswerHelp")
         .html("please enter the answer!")
         .addClass("text-danger");
       return false;
     } else {
-      $("#securityqueHelp").empty();
+      $("#securityanswerHelp").empty();
       return true;
     }
   };
@@ -163,6 +163,21 @@ $(document).ready(function validate() {
         }
 
   }
+
+  let profilePhoto = function(){
+    let photo = $("#profile-photo").val();
+    if(photo === "" || photo === undefined){
+        $("#profilephotoHelp")
+                .html("please upload the profile photo!")
+                .addClass("text-danger");
+              return false;
+        }
+        else {
+            $("#profilephotoHelp").empty();
+            return true;
+        }
+
+  }
   let gender = function () {
     let selectedGender = $(".gender:checked").val();
 
@@ -206,36 +221,53 @@ $(document).ready(function validate() {
     $("#dateHelp").empty();
   });
 
-//  let addresses = function(){
-//    let length = $("#addresses").children("div").length;
-//
-//    if(length == 0){
-//        return false;
-//    }else{
-//    for(let i=1; i<=length;i++){
-//    let addressClass = ".address"+i;
-//        let street = $("address1").find('[name="street"]');
-//        let city = $(addressClass).find('[name="city"]');
-//        let state = $(addressClass).find('[name="state"]');
-//        let zip = $(addressClass).find('[name="zip"]');
-//        let country = $(addressClass).find('[name="country"]');
-//
-//        if(street == "" || street == undefined ||city == "" || city == undefined ||state == "" || state == undefined ||zip == "" || zip == undefined ||country == "" || country == undefined )
-//        {
-//            $(addressClass).find(".addressesHelp").html("please select the gender").addClass("text-danger");
-//            return false;
-//        }else{
-//            $(addressClass).find(".addressesHelp").empty();
-//            return true;
-//        }
-//
-//
-//
-//    }
-//    }
-//
-//
-//  }
+    $("#registration-form").on('submit', function (event) {
+                       event.preventDefault();
+                       form = new FormData(this);
+                       console.log(form);
+                       $.ajax({
+                           url: 'registerServlet',
+                           type: 'POST',
+                           data: form,
+                           success: function (data, textStatus, jqXHR) {
+                                console.log(data);
+                               if(data.trim() === 'done'){
+                               let message = "Registered Successfully";
+                               showErrorPopup(message);
+                               setTimeout(function () {
+                                    window.location.href = "login.jsp";
+                                }, 3000);
+
+                               }else if(data.trim() === 'updated'){
+                               let message = "User Updated Successfully";
+                               showErrorPopup(message);
+                               setTimeout(function () {
+                                    window.location.href = "view.jsp";
+                                }, 3000);
+
+                               }else if(data.trim() === 'exist'){
+                               let message = "User already exist with this email use different email !!!!";
+                               showErrorPopup(message);
+                               }
+                               else{
+                               showErrorPopup(data);
+                               }
+                           },
+                           error: function (jqXHR, textStatus, errorThrown) {
+                               console.log(jqXHR);
+                           },
+                           processData: false,
+                           contentType: false
+                       });
+                   });
+
+                   // Function to show the error popup
+                   function showErrorPopup(message) {
+                       $("#errorPopup").html(message).show();
+                       setTimeout(function () {
+                           $("#errorPopup").hide();
+                       }, 3000);
+    }
 
 
 
@@ -262,6 +294,7 @@ $(document).ready(function validate() {
   $("#submit-btn").click(gender);
   $("#submit-btn").click(role);
   $("#submit-btn").click(cnfPassword);
+  $("#submit-btn").click(profilePhoto);
 
 
 });
