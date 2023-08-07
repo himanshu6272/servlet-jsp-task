@@ -3,49 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <title>Form Validation</title>
-    <style>
-  *{
-  margin:0px;
-  padding:0px;
-  box-sizing:border-box;
-  }
-  #inputCity, #inputState, #inputZip, #inputCountry {
-  width: 49%;
-  display:inline;
-  }
 
-  #addresses {
-  max-height: 300px;
-  overflow: auto;
-  }
-
-  .user-icon-div {
-    width:100%;
-  }
-  .user-icon-div img{
-    width:5%;
-  }
-
-    </style>
 </head>
 
 <body class="bg-warning">
-<%@ include file="header.html" %>
+<div id="errorPopup" class="alert" role="alert"></div>
+<%@ include file="header.jsp" %>
 <div class="container">
+
     <div class="row" id="register-user-header">
         <div class="col bg-secondary text-center user-icon-div p-3">
-            <img src="assets/images/user.png">
+        <div id="profile-image" class="mx-auto">
+          <img alt="profile-image" src="assets/images/user.png">
+        </div>
             <h3 class="text-white">Register here</h3>
         </div>
     </div>
     <div class="row">
         <div class="col p-0 bg-light">
-            <form onsubmit="return validate()" action="registerServlet" method="post"
+            <form onsubmit="return validate()" action="registerServlet" id="registration-form" method="post" enctype="multipart/form-data"
                   class="border border-solid border-black rounded-lg p-4">
                 <div class="row">
                     <div class="form-group col-6">
@@ -137,9 +119,22 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="security-que">Security question: Who is your favourite Bollywood Star ?</label>
-                    <input type="text" class="form-control" id="security-que" placeholder="Enter answer here" name="security-que">
-                    <small id="securityqueHelp" class="form-text"></small>
+                    <label for="security-que">Security question: </label>
+                    <select class="form-control mb-3" name="security-que" id="security-que">
+                        <option>None</option>
+                        <option>Who is your favourite Bollywood Star?</option>
+                        <option>Who is your favourite Cricketer?</option>
+                        <option>Who is your favourite Teacher?</option>
+                        <option>Who you love the most?</option>
+                    </select>
+                    <input type="text" class="form-control" id="security-answer" placeholder="Enter answer here" name="security-answer">
+                    <small id="securityanswerHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-photo">Profile Photo</label><br>
+                    <input type="file" id="profile-photo" name="profile-photo">
+                    <small id="profilephotoHelp" class="form-text"></small>
                 </div>
 
                <input type="submit" value="Submit" class="btn btn-outline-primary form-control" id="submit-btn" />
@@ -147,11 +142,11 @@
         </div>
     </div>
 </div>
-
+<%@ include file="footer.html" %>
 <script src="./assets/jquery/jQuery 3.6.4.js"></script>
 <script src="./assets/js/index.js"></script>
 <script src="./assets/js/validation.js"></script>
 <script src="./assets/jquery/jquery-ui.js"></script>
-<%@ include file="footer.html" %>
+
 </body>
 </html>

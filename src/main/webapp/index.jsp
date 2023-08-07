@@ -6,14 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
-    <style>
-    .div-cont{
-        height:81vh;
-    }
-    </style>
+        <link rel="stylesheet" href="./assets/css/style.css">
+
 </head>
 <body class="bg-warning">
-<%@ include file="header.html" %>
+<%@ include file="header.jsp" %>
     <div class="container div-cont">
     <div class="row">
     <div class="jumbotron col mb-0 text-warning mt-5 bg-dark">

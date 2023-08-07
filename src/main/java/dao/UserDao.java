@@ -20,7 +20,7 @@ public class UserDao {
         boolean flag = false;
 
         try {
-            String query = "insert into user(firstname, lastname, mobile, email, role, gender, dob, password) values(?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "insert into user(firstname, lastname, mobile, email, role, gender, dob, password, question, answer, filename) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -30,6 +30,9 @@ public class UserDao {
             preparedStatement.setString(6, user.getGender());
             preparedStatement.setString(7, user.getDob());
             preparedStatement.setString(8, user.getPassword());
+            preparedStatement.setString(9, user.getSecurityQuestion());
+            preparedStatement.setString(10, user.getSecurityAnswer());
+            preparedStatement.setString(11, user.getFileName());
 
             preparedStatement.executeUpdate();
             flag = true;
@@ -57,6 +60,9 @@ public class UserDao {
                 user.setGender(set.getString(7));
                 user.setDob(set.getString(8));
                 user.setPassword(set.getString(9));
+                user.setSecurityQuestion(set.getString(10));
+                user.setSecurityAnswer(set.getString(11));
+                user.setFileName(set.getString(12));
             }
 
         }catch (Exception e){
@@ -84,7 +90,10 @@ public class UserDao {
                         set.getString(6),
                         set.getString(7),
                         set.getString(8),
-                        set.getString(9)
+                        set.getString(9),
+                        set.getString(10),
+                        set.getString(11),
+                        set.getString(12)
                 );
                 users.add(user);
             }
@@ -111,12 +120,14 @@ public class UserDao {
                 user.setGender(set.getString(7));
                 user.setDob(set.getString(8));
                 user.setPassword(set.getString(9));
+                user.setSecurityQuestion(set.getString(10));
+                user.setSecurityAnswer(set.getString(11));
+                user.setFileName(set.getString(12));
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
-
 
         return user;
 
@@ -126,7 +137,7 @@ public class UserDao {
         boolean flag = false;
 
         try {
-            String query = "update user set firstname=?, lastname=?, mobile=?, email=?, role=?, gender=?, dob=?, password=? where id=?";
+            String query = "update user set firstname=?, lastname=?, mobile=?, email=?, role=?, gender=?, dob=?, password=?, question=?, answer=?, filename=? where id=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -136,7 +147,10 @@ public class UserDao {
             preparedStatement.setString(6, user.getGender());
             preparedStatement.setString(7, user.getDob());
             preparedStatement.setString(8, user.getPassword());
-            preparedStatement.setInt(9, user.getId());
+            preparedStatement.setString(9, user.getSecurityQuestion());
+            preparedStatement.setString(10, user.getSecurityAnswer());
+            preparedStatement.setString(11, user.getFileName());
+            preparedStatement.setInt(12, user.getId());
 
 
 
@@ -158,6 +172,24 @@ public class UserDao {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             flag = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
+    public boolean updatePassword(User user){
+        boolean flag = false;
+
+        try {
+            String query = "update user set password=? where email=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.executeUpdate();
+            flag = true;
+
         }catch (Exception e){
             e.printStackTrace();
         }

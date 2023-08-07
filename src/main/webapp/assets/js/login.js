@@ -37,9 +37,13 @@ $(document).ready(function validate() {
         }
       };
 
+
+
     $("#email-address").blur(emailAddress);
     $("#password").blur(pwd);
     $("#submit-btn").click(emailAddress);
     $("#submit-btn").click(pwd);
+
+
 
 });

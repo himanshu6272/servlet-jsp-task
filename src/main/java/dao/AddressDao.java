@@ -46,6 +46,8 @@ public class AddressDao {
             ResultSet set = preparedStatement.executeQuery();
             while (set.next()){
                 Address address = new Address();
+                address.setId(set.getInt(1));
+                address.setUserId(set.getInt(2));
                 address.setStreet(set.getString(3));
                 address.setCity(set.getString(4));
                 address.setState(set.getString(5));
@@ -60,5 +62,42 @@ public class AddressDao {
 
         return addresses;
     }
+
+    public boolean delete(int id){
+        boolean flag = false;
+        try {
+            String query = "delete from address where id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            flag = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
+    public  boolean update(Address address){
+        boolean flag = false;
+        try{
+            String query = "update address set user_id=?, street=?, city=?, state=?, zip=?, country=? where id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, address.getUserId());
+            preparedStatement.setString(2, address.getStreet());
+            preparedStatement.setString(3, address.getCity());
+            preparedStatement.setString(4, address.getState());
+            preparedStatement.setString(5, address.getZip());
+            preparedStatement.setString(6, address.getCountry());
+            preparedStatement.setInt(7, address.getId());
+            preparedStatement.executeUpdate();
+
+            flag = true;
+        }catch (Exception e){
+
+        }
+        return flag;
+    }
+
 
 }

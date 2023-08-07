@@ -25,4 +25,22 @@ public class AddressServiceImpl implements AddressService{
         List<Address> addresses = this.addressDao.getByUserId(userId);
         return addresses;
     }
+
+
+    public void deleteAddress(int id) {
+        if (this.addressDao.delete(id)){
+            logger.info("Address deleted successfully");
+        }else {
+            logger.info("something went wrong");
+        }
+    }
+
+
+    public void updateAddress(Address address) {
+        if (this.addressDao.update(address)){
+            logger.info("address updated");
+        }else {
+            logger.error("something went wrong");
+        }
+    }
 }

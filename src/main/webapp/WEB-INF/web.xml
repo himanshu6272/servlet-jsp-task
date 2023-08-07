@@ -47,4 +47,52 @@
         <servlet-name>deleteUSerServlet</servlet-name>
         <url-pattern>/deleteServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>adminServlet</servlet-name>
+        <servlet-class>controllers.adminServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminServlet</servlet-name>
+        <url-pattern>/adminServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>forgotServlet</servlet-name>
+        <servlet-class>controllers.ForgotPasswordController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>forgotServlet</servlet-name>
+        <url-pattern>/forgotServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>resetServlet</servlet-name>
+        <servlet-class>controllers.ResetPasswordController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resetServlet</servlet-name>
+        <url-pattern>/resetServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteAddress</servlet-name>
+        <servlet-class>controllers.DeleteAddressServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteAddress</servlet-name>
+        <url-pattern>/deleteAddress</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>validationFilter</filter-name>
+        <filter-class>controllers.ValidationServlet</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>validationFilter</filter-name>
+        <url-pattern>/registerServlet</url-pattern>
+    </filter-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error_404.jsp</location>
+    </error-page>
 </web-app>

@@ -1,41 +1,56 @@
 package controllers;
 
-import dao.UserDao;
 import models.Address;
 import models.User;
 import services.AddressService;
 import services.AddressServiceImpl;
 import services.UserService;
 import services.UserServiceImpl;
-import utils.ConnectionProvider;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.*;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
+@MultipartConfig
 public class UserController extends HttpServlet {
     public UserService userService = new UserServiceImpl();
     public AddressService addressService = new AddressServiceImpl();
 
+    Base64.Encoder encoder = Base64.getEncoder();
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Object objId = session.getAttribute("updateUserId");
+        int updateUserId = 0;
+        if (objId != null){
+            updateUserId = (int) objId;
+        }
+
         String firstname = req.getParameter("firstname");
         String lastname = req.getParameter("lastname");
         String email = req.getParameter("email");
+        if (email == null){
+            email = this.userService.getUserById(updateUserId).getEmail();
+        }
         String mobile = req.getParameter("mobile");
         String password = req.getParameter("password");
+        String encodedPassword = encoder.encodeToString(password.getBytes());
         String role = req.getParameter("role");
+        if (role == null){
+            role = this.userService.getUserById(updateUserId).getRole();
+        }
         String dob = req.getParameter("dob");
         String gender = req.getParameter("gender");
-
-        String strId = req.getParameter("userId");
-
-
+        String question = req.getParameter("security-que");
+        String answer = req.getParameter("security-answer");
+        Part profilePhoto = req.getPart("profile-photo");
+        String fileName = profilePhoto.getSubmittedFileName();
+        System.out.println(fileName);
 
         String[] street = req.getParameterValues("street");
         String[] city = req.getParameterValues("city");
@@ -43,23 +58,51 @@ public class UserController extends HttpServlet {
         String[] zip = req.getParameterValues("zip");
         String[] country = req.getParameterValues("country");
 
-        if(strId == null){
-            User user = new User(firstname,lastname,mobile,email,role,dob,gender,password);
-            this.userService.registerUser(user);
-            int userId = this.userService.getUserByEmail(email).getId();
+        if(objId == null){
+            User user = new User(firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
+            if (this.userService.registerUser(user) == 1){
+                String path = getServletContext().getRealPath("") + "profilePhotos";
+                File file = new File(path);
+                profilePhoto.write(path+File.separator+fileName);
+            }
 
+            int userId = this.userService.getUserByEmail(email).getId();
             for (int i=0;i< street.length;i++){
                 Address address = new Address(userId, street[i], city[i], state[i], zip[i], country[i]);
                 this.addressService.saveAddress(address);
             }
-            resp.sendRedirect("login.jsp");
+        resp.getWriter().write("done");
         }else {
-            int id = Integer.parseInt(strId);
-            User user = new User(id, firstname,lastname,mobile,email,role,dob,gender,password);
+            String[] addressId = req.getParameterValues("addressId");
+            User user = new User(updateUserId, firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
             this.userService.updateUser(user);
-            User user1 = this.userService.getUserById(id);
-            req.setAttribute("user", user1);
-            req.getRequestDispatcher("view.jsp").forward(req,resp);
+            String path = getServletContext().getRealPath("") + "profilePhotos";
+            File file = new File(path);
+            profilePhoto.write(path+File.separator+fileName);
+            for (int i = 0; i < street.length; i++) {
+
+                if (addressId == null) {
+                        Address address = new Address(updateUserId, street[i], city[i], state[i], zip[i], country[i]);
+                        this.addressService.saveAddress(address);
+                    } else {
+                        if (Objects.equals(addressId[i], "")){
+                            Address address = new Address(updateUserId, street[i], city[i], state[i], zip[i], country[i]);
+                            this.addressService.saveAddress(address);
+                        }else {
+                            int aId = Integer.parseInt(addressId[i]);
+                            Address address = new Address(aId, updateUserId, street[i], city[i], state[i], zip[i], country[i]);
+                            this.addressService.updateAddress(address);
+                        }
+                    }
+                }
+
+            session.removeAttribute("user");
+            session.removeAttribute("addresses");
+            User user1 = this.userService.getUserById(updateUserId);
+            List<Address> addresses = this.addressService.getAddressByUserId(updateUserId);
+            session.setAttribute("user", user1);
+            session.setAttribute("addresses", addresses);
+            resp.getWriter().write("updated");
         }
 
     }
