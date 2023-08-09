@@ -2,9 +2,10 @@ package services;
 
 import models.User;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends Serializable {
     int registerUser(User user);
 
     List<User> getAllUsers();

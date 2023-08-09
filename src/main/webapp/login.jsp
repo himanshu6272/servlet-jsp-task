@@ -6,9 +6,14 @@
   <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-
+<%
+response.setHeader("Cache-Control", "no-cache, no-store");
+String user = (String)session.getAttribute("loggedInUser");
+System.out.println(user);
+if(session == null || user == null){
+%>
 <body class="bg-warning">
-<div id="errorPopup" class="alert" role="alert"></div>
+<div id="errorPopup" class="alert bg-danger" role="alert"></div>
 <%@ include file="header.jsp" %>
 <div class="container div-cont">
   <div class="row w-50 mx-auto pt-5">
@@ -56,7 +61,7 @@
                                 console.log(data);
                                 showErrorPopup(data);
                                 if(data.trim() === 'admin'){
-                                    $("#errorPopup").addClass("alert-success");
+                                    $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
                                     let message = "LoggedIn Successfully";
                                     showErrorPopup(message);
                                     setTimeout(function () {
@@ -64,7 +69,7 @@
                                      }, 3000);
 
                                 }else if(data.trim() === 'user'){
-                                    $("#errorPopup").addClass("alert-success");
+                                    $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
                                     let message = "LoggedIn Successfully";
                                     showErrorPopup(message);
                                     setTimeout(function () {
@@ -93,5 +98,13 @@
 
         });
     </script>
+
 </body>
+<%
+}else if(user.equals("user")){
+    response.sendRedirect("view.jsp");
+ }else{
+    response.sendRedirect("admin.jsp");
+ }
+%>
 </html>

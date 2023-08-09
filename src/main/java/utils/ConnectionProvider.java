@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class ConnectionProvider {
-    public static Connection connection;
+
 
     public static Connection getConnection() {
+
+        Connection connection = null;
 
         try {
             if (connection == null){

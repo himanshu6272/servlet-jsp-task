@@ -6,11 +6,14 @@ import services.UserService;
 import services.UserServiceImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
+@MultipartConfig
 public class ForgotPasswordController extends HttpServlet {
 
     private UserService userService = new UserServiceImpl();
@@ -20,19 +23,21 @@ public class ForgotPasswordController extends HttpServlet {
         String email = req.getParameter("email");
         String question = req.getParameter("security-que");
         String answer = req.getParameter("security-answer");
-        String password = req.getParameter("password");
-
-        resp.setContentType("text/html");
+        logger.info(email);
+        logger.info(question);
+        logger.info(answer);
 
         User user = this.userService.getUserByEmail(email);
-
-        if(user != null && user.getSecurityQuestion().equals(question) && user.getSecurityAnswer().equals(answer)){
+        if (user.getEmail()==null){
+            resp.getWriter().println("User does not exist with this email");
+        }else if(user.getSecurityQuestion().equals(question) && user.getSecurityAnswer().equals(answer)){
             logger.info("http://localhost:9899/ServletJspTask/reset.jsp?email="+email+"");
-            resp.getWriter().println("<h3>Password reset link is sent to the logs, click here to goto on login page<a href='login.jsp'>click here</a></h3>");
-        }else {
-            resp.getWriter().println("<h3>User does not exist with this email, click here to goto on login page<a href='login.jsp'>click here</a></h3>");
+            resp.getWriter().println("sent");
+        }else if (!Objects.equals(user.getSecurityQuestion(), question)){
+            resp.getWriter().println("Please enter valid security question!");
+        }else if (!Objects.equals(user.getSecurityAnswer(), answer)){
+            resp.getWriter().println("Please enter valid security answer!");
         }
-
 
     }
 }

@@ -1,3 +1,6 @@
+<%@page import="models.User, models.Address, java.util.*, java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,23 +14,28 @@
     <title>Form Validation</title>
 
 </head>
+<%
+response.setHeader("Cache-Control", "no-cache, no-store");
+String user = (String)session.getAttribute("loggedInUser");
+if(session == null || user == null){
+%>
 
 <body class="bg-warning">
-<div id="errorPopup" class="alert" role="alert"></div>
+<div id="errorPopup" class="alert bg-danger" role="alert"></div>
 <%@ include file="header.jsp" %>
 <div class="container">
 
     <div class="row" id="register-user-header">
         <div class="col bg-secondary text-center user-icon-div p-3">
-        <div id="profile-image" class="mx-auto">
-          <img alt="profile-image" src="assets/images/user.png">
-        </div>
+            <div id="profile-image" class="mx-auto">
+              <img alt="profile-image" src="assets/images/user.png">
+            </div>
             <h3 class="text-white">Register here</h3>
         </div>
     </div>
     <div class="row">
         <div class="col p-0 bg-light">
-            <form onsubmit="return validate()" action="registerServlet" id="registration-form" method="post" enctype="multipart/form-data"
+            <form onsubmit="return validate()" id="registration-form" method="post" enctype="multipart/form-data"
                   class="border border-solid border-black rounded-lg p-4">
                 <div class="row">
                     <div class="form-group col-6">
@@ -67,7 +75,7 @@
                                 <label for="admin">Admin</label>
                                 <input type="radio" name="role" class="role" id="user" value="USER">
                                 <label for="user">User</label>
-                                <small id="rolehelp" class="form-text"></small>
+                                <small id="roleHelp" class="form-text"></small>
                             </div>
                             <div class="form-group col-7">
                                 <label class="d-block">Gender</label>
@@ -118,26 +126,32 @@
                         <small id="cnfpasswordHelp" class="form-text"></small>
                     </div>
                 </div>
-                <div class="form-group">
+
+                <div class="row">
+                <div class="form-group col-6">
                     <label for="security-que">Security question: </label>
-                    <select class="form-control mb-3" name="security-que" id="security-que">
-                        <option>None</option>
+                    <select class="form-control" name="security-que" id="security-que">
+                        <option value="none">None</option>
                         <option>Who is your favourite Bollywood Star?</option>
                         <option>Who is your favourite Cricketer?</option>
                         <option>Who is your favourite Teacher?</option>
                         <option>Who you love the most?</option>
                     </select>
+                    <small id="securityQuestionHelp" class="form-text mb-4"></small>
                     <input type="text" class="form-control" id="security-answer" placeholder="Enter answer here" name="security-answer">
                     <small id="securityanswerHelp" class="form-text"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group col-6 mt-4">
                     <label for="profile-photo">Profile Photo</label><br>
                     <input type="file" id="profile-photo" name="profile-photo">
                     <small id="profilephotoHelp" class="form-text"></small>
                 </div>
 
-               <input type="submit" value="Submit" class="btn btn-outline-primary form-control" id="submit-btn" />
+                </div>
+
+               <input type="submit" value="Submit" class="btn btn-primary w-25" id="submit-btn" />
+               <input type="reset" value="Reset" class="btn btn-primary ml-2 w-25" />
             </form>
         </div>
     </div>
@@ -149,4 +163,11 @@
 <script src="./assets/jquery/jquery-ui.js"></script>
 
 </body>
+<%
+}else if(user.equals("user")){
+    response.sendRedirect("view.jsp");
+ }else{
+    response.sendRedirect("admin.jsp");
+ }
+%>
 </html>

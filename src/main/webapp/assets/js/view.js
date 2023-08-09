@@ -1,40 +1,10 @@
 $(document).ready(function(){
-
-    console.log("dfghjk....");
-//    function disableBack() {
-//        console.log("dfgrtghjhjk....");
-//        window.history.forward()
-//    }
-//    window.onload = disableBack();
-//    window.onpageshow = function(e) {
-//
-//        if (e.persisted){
-//            console.log("dfghjk....");
-//            disableBack();
-//        }
-//
-//    }
-
-
-    let searchParams = new URLSearchParams(window.location.search);
-    let role = searchParams.get("role");
-
-    if(searchParams.has('adminId')){
-        $(".navbar-brand").addClass("d-none");
-        $("#dashboard-btn").removeClass("d-none");
-    }else{
-        $(".navbar-brand").remove();
-    }
-
+    $(".navbar-brand").addClass("d-none");
     $("#edit-user-btn").click(function(){
         $("input").removeAttr("disabled");
+
+        $("#email-address").attr("disabled", "disabled");
         $(".remove-address-btn").removeAttr("disabled");
-         if(role === "ADMIN"){
-                $("#email-address").attr("disabled", "disabled");
-            }else{
-                $("#email-address").attr("disabled", "disabled");
-                $("input.role").attr("disabled", "disabled");
-            }
         $("#submit-btn").removeAttr("disabled");
         $("#add-address-btn").removeClass("d-none");
     })
@@ -46,5 +16,7 @@ $(document).ready(function(){
     $("#add-address-btn").click(function(){
         $("#address").removeClass("d-none");
     })
+
+
 
 })

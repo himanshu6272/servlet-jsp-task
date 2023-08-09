@@ -11,16 +11,11 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 
 public class ValidationServlet implements Filter {
-
     private final static Logger logger = Logger.getLogger(ValidationServlet.class);
-
     private UserService userService = new UserServiceImpl();
-
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-
         HttpServletRequest req = (HttpServletRequest) request;
-
         HttpSession session = req.getSession();
         Object objId = session.getAttribute("updateUserId");
         int id = 0;
@@ -30,7 +25,7 @@ public class ValidationServlet implements Filter {
             id = (int) objId;
         }
         String emailId = req.getParameter("email");
-        if (emailId == null && id != 0){
+        if (emailId==null && id != 0){
             emailId = this.userService.getUserById(id).getEmail();
         }
         boolean firstname = req.getParameter("firstname").matches("^[A-Z,a-z]{2,8}$");

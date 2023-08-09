@@ -2,9 +2,10 @@ package services;
 
 import models.Address;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface AddressService {
+public interface AddressService extends Serializable {
 
     void saveAddress(Address address);
 

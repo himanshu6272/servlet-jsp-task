@@ -3,7 +3,6 @@ $(document).ready(function() {
     $("#register-btn").addClass("d-none");
     $("#update-profile-btn").removeClass("d-none");
     $(".navbar-brand").addClass("d-none");
-    $("#dashboard-btn").removeClass("d-none");
 
 $(".remove-user-btn").click(function(){
     $(this).closest("tr").remove();

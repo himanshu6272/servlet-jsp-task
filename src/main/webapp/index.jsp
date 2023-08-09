@@ -9,6 +9,11 @@
         <link rel="stylesheet" href="./assets/css/style.css">
 
 </head>
+<%
+response.setHeader("Cache-Control", "no-cache, no-store");
+String user = (String)session.getAttribute("loggedInUser");
+if(session == null || user == null){
+%>
 <body class="bg-warning">
 <%@ include file="header.jsp" %>
     <div class="container div-cont">
@@ -26,4 +31,11 @@
     </div>
 <%@ include file="footer.html" %>
 </body>
+<%
+}else if(user.equals("user")){
+    response.sendRedirect("view.jsp");
+ }else{
+    response.sendRedirect("admin.jsp");
+ }
+%>
 </html>

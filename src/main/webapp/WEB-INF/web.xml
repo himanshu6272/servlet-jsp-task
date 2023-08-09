@@ -90,6 +90,15 @@
         <filter-name>validationFilter</filter-name>
         <url-pattern>/registerServlet</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>myFilter</filter-name>
+        <filter-class>controllers.MyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>myFilter</filter-name>
+        <url-pattern>/view.jsp </url-pattern>
+        <url-pattern>/admin.jsp </url-pattern>
+    </filter-mapping>
 
     <error-page>
         <error-code>404</error-code>
