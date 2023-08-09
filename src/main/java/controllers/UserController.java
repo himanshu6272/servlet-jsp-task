@@ -6,7 +6,6 @@ import services.AddressService;
 import services.AddressServiceImpl;
 import services.UserService;
 import services.UserServiceImpl;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
@@ -18,18 +17,21 @@ import java.util.Objects;
 
 @MultipartConfig
 public class UserController extends HttpServlet {
+
+    private static final long serialVersionUID= 3522684328714479049L;
     public UserService userService = new UserServiceImpl();
     public AddressService addressService = new AddressServiceImpl();
-
-    Base64.Encoder encoder = Base64.getEncoder();
-
+    private transient Base64.Encoder encoder = Base64.getEncoder();
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Object objId = session.getAttribute("updateUserId");
+        Object userObjId = session.getAttribute("updateUserId");
         int updateUserId = 0;
-        if (objId != null){
-            updateUserId = (int) objId;
+        if (userObjId != null){
+            updateUserId = (int) userObjId;
         }
+
+//        ---------getting all form fields---------
+
 
         String firstname = req.getParameter("firstname");
         String lastname = req.getParameter("lastname");
@@ -50,7 +52,8 @@ public class UserController extends HttpServlet {
         String answer = req.getParameter("security-answer");
         Part profilePhoto = req.getPart("profile-photo");
         String fileName = profilePhoto.getSubmittedFileName();
-        System.out.println(fileName);
+
+//        ---------getting all address fields---------
 
         String[] street = req.getParameterValues("street");
         String[] city = req.getParameterValues("city");
@@ -58,14 +61,12 @@ public class UserController extends HttpServlet {
         String[] zip = req.getParameterValues("zip");
         String[] country = req.getParameterValues("country");
 
-        if(objId == null){
+        if(userObjId == null){
             User user = new User(firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
             if (this.userService.registerUser(user) == 1){
                 String path = getServletContext().getRealPath("") + "profilePhotos";
-                File file = new File(path);
                 profilePhoto.write(path+File.separator+fileName);
             }
-
             int userId = this.userService.getUserByEmail(email).getId();
             for (int i=0;i< street.length;i++){
                 Address address = new Address(userId, street[i], city[i], state[i], zip[i], country[i]);
@@ -77,7 +78,7 @@ public class UserController extends HttpServlet {
             User user = new User(updateUserId, firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
             this.userService.updateUser(user);
             String path = getServletContext().getRealPath("") + "profilePhotos";
-            File file = new File(path);
+//            File file = new File(path);
             profilePhoto.write(path+File.separator+fileName);
             for (int i = 0; i < street.length; i++) {
 

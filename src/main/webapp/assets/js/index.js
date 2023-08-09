@@ -46,13 +46,8 @@ $("#add-address-btn").click(function(){
             id = id + 1;
         })
 
-        $(document).on("click", ".remove-address-btn", function(event) {
+        $(document).on("click", ".remove-address-btn", function() {
             $(this).closest(".address").remove();
-            event.preventDefault();
-                $.ajax({
-                    url: 'deleteAddress',
-                    type: 'GET'
-                })
         });
 
 

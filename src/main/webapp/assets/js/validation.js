@@ -201,9 +201,23 @@ $(document).ready(function validate() {
     }
   };
 
+  let securityQuestion = function(){
+        let que = $("#security-que").val();
+        if(que === "none" || que === undefined){
+            $("#securityQuestionHelp").html("please select the security question!").addClass("text-danger");
+            return false;
+        }else{
+            $("#securityQuestionHelp").empty();
+            return true;
+        }
+  };
+
 
   $(".gender").click(function () {
       $("#genderHelp").empty();
+  });
+ $(".role").click(function () {
+      $("#roleHelp").empty();
   });
 
   $("#dob").datepicker({
@@ -232,6 +246,7 @@ $(document).ready(function validate() {
                            success: function (data, textStatus, jqXHR) {
                                 console.log(data);
                                if(data.trim() === 'done'){
+                               $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
                                let message = "Registered Successfully";
                                showErrorPopup(message);
                                setTimeout(function () {
@@ -239,6 +254,7 @@ $(document).ready(function validate() {
                                 }, 3000);
 
                                }else if(data.trim() === 'updated'){
+                               $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
                                let message = "User Updated Successfully";
                                showErrorPopup(message);
                                setTimeout(function () {
@@ -267,7 +283,23 @@ $(document).ready(function validate() {
                        setTimeout(function () {
                            $("#errorPopup").hide();
                        }, 3000);
-    }
+                    }
+
+    $("#profile-photo").on('change', function(){
+        let inputFile = $(this);
+        let files = inputFile[0].files;
+        let fileName = files[0].name;
+        let extension = fileName.substr(fileName.lastIndexOf("."));
+        let allowedExtensionsRegx = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        let isAllowed = allowedExtensionsRegx.test(extension);
+        if(isAllowed){
+        $("#profilephotoHelp").empty();
+        return true;
+        }else{
+          $("#profilephotoHelp").html("please upload valid file").addClass("text-danger");
+          return false;
+        }
+    })
 
 
 
@@ -277,7 +309,6 @@ $(document).ready(function validate() {
   $("#mobile-number").blur(mobileNumber);
   $("#email-address").blur(emailAddress);
   $("#dob").blur(dateOfBirth);
-//  $("#address").blur(resAddress);
   $("#security-que").blur(securityQue);
   $("#password").blur(pwd);
   $("#cnf-password").blur(cnfPassword);
@@ -286,15 +317,14 @@ $(document).ready(function validate() {
   $("#submit-btn").click(mobileNumber);
   $("#submit-btn").click(emailAddress);
   $("#submit-btn").click(dateOfBirth);
-//  $("#submit-btn").click(resAddress);
   $("#submit-btn").click(address);
-//  $("#submit-btn").click(addresses);
   $("#submit-btn").click(securityQue);
   $("#submit-btn").click(pwd);
   $("#submit-btn").click(gender);
   $("#submit-btn").click(role);
   $("#submit-btn").click(cnfPassword);
   $("#submit-btn").click(profilePhoto);
+  $("#submit-btn").click(securityQuestion);
 
 
 });

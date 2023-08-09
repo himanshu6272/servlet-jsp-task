@@ -15,11 +15,7 @@
 <%
     response.setHeader("Cache-Control", "no-cache, no-store");
     User user = (User)session.getAttribute("user");
-    if(user == null){
-    response.sendRedirect("index.jsp");
-    }
     List<Address> addresses = (List)session.getAttribute("addresses");
-    session.setAttribute("updateUserId", user.getId());
     request.setAttribute("addresses", addresses);
 
 %>
@@ -69,6 +65,7 @@
         <div class="row">
           <div class="col-6">
             <div class="row">
+
               <div class="form-group col-5">
                 <label class="d-block">Role</label>
                 <input disabled type="radio" name="role" class="role" id="admin" value="ADMIN" <c:if test="${user.role eq 'ADMIN'}">checked</c:if>>
@@ -136,7 +133,7 @@
           <input disabled name="country" value="${address.getCountry()}"><br>
           </div>
           </div>
-          <a href="deleteAddress?addId=${address.getId()}" type="button" class="btn btn-primary remove-address-btn text-white">Remove</a>
+          <a type="button" class="btn btn-primary remove-address-btn text-white">Remove</a>
           </div>
           </c:forEach>
         </div>
@@ -152,23 +149,27 @@
             <input disabled type="password" class="form-control" id="cnf-password" value="${user.getPassword()}">
             <small id="cnfpasswordHelp" class="form-text"></small>
           </div>
-          <div class="form-group w-100 p-3">
-              <label for="security-que">Security question: </label>
-              <select class="form-control mb-3" name="security-que" id="security-que">
-                  <option>None</option>
-                  <option>Who is your favourite Bollywood Star?</option>
-                  <option>Who is your favourite Cricketer?</option>
-                  <option>Who is your favourite Teacher?</option>
-                  <option>Who you love the most?</option>
-              </select>
-              <input disabled type="text" class="form-control" id="security-answer" placeholder="Enter answer here" name="security-answer" value="${user.getSecurityAnswer()}">
-              <small id="securityanswerHelp" class="form-text"></small>
           </div>
+          <div class="row">
+            <div class="form-group col-6">
+                <label for="security-que">Security question: </label>
+                <select class="form-control" name="security-que" id="security-que">
+                    <option value="none">None</option>
+                    <option>Who is your favourite Bollywood Star?</option>
+                    <option>Who is your favourite Cricketer?</option>
+                    <option>Who is your favourite Teacher?</option>
+                    <option>Who you love the most?</option>
+                </select>
+                <small id="securityQuestionHelp" class="form-text mb-4"></small>
+                <input type="text" class="form-control" id="security-answer" placeholder="Enter answer here" name="security-answer" value="${user.getSecurityAnswer()}">
+                <small id="securityanswerHelp" class="form-text"></small>
+            </div>
 
-          <div class="form-group w-100 px-3">
-              <label for="profile-photo">Profile Photo</label><br>
-              <input disabled type="file" id="profile-photo" name="profile-photo">
-              <small id="profilephotoHelp" class="form-text"></small>
+            <div class="form-group col-6 mt-4">
+                <label for="profile-photo">Profile Photo</label><br>
+                <input type="file" id="profile-photo" name="profile-photo">
+                <small id="profilephotoHelp" class="form-text"></small>
+            </div>
           </div>
 
         <div class="text-center w-100 mt-3">

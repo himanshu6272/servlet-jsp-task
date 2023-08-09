@@ -1,15 +1,20 @@
 package dao;
 
 import models.Address;
+import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressDao {
-    private Connection connection;
+public class AddressDao implements Serializable {
+
+    private static final long serialVersionUID = -1893173580745472716L;
+    private static final Logger logger = Logger.getLogger(UserDao.class);
+    private transient Connection connection;
     public AddressDao(Connection connection){
         this.connection = connection;
     }
@@ -28,9 +33,11 @@ public class AddressDao {
             preparedStatement.setString(6, address.getCountry());
 
             preparedStatement.executeUpdate();
+
+            preparedStatement.close();
             flag = true;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;
@@ -56,8 +63,10 @@ public class AddressDao {
                 addresses.add(address);
             }
 
+            preparedStatement.close();
+
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return addresses;
@@ -70,9 +79,10 @@ public class AddressDao {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             flag = true;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;
@@ -92,9 +102,11 @@ public class AddressDao {
             preparedStatement.setInt(7, address.getId());
             preparedStatement.executeUpdate();
 
+            preparedStatement.close();
+
             flag = true;
         }catch (Exception e){
-
+            logger.error(e);
         }
         return flag;
     }

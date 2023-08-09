@@ -1,16 +1,21 @@
 package dao;
 
 import models.User;
+import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao {
+public class UserDao implements Serializable {
 
-    private Connection connection;
+    private static final long serialVersionUID = -4360092092454209390L;
+    private static final Logger logger = Logger.getLogger(UserDao.class);
+
+    private transient Connection connection;
 
     public UserDao(Connection connection) {
         this.connection = connection;
@@ -35,9 +40,11 @@ public class UserDao {
             preparedStatement.setString(11, user.getFileName());
 
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+
             flag = true;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;
@@ -64,9 +71,11 @@ public class UserDao {
                 user.setSecurityAnswer(set.getString(11));
                 user.setFileName(set.getString(12));
             }
+            preparedStatement.close();
+
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
 
@@ -97,8 +106,9 @@ public class UserDao {
                 );
                 users.add(user);
             }
+            preparedStatement.close();
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
         return users;
     }
@@ -124,9 +134,11 @@ public class UserDao {
                 user.setSecurityAnswer(set.getString(11));
                 user.setFileName(set.getString(12));
             }
+            preparedStatement.close();
+
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return user;
@@ -151,13 +163,12 @@ public class UserDao {
             preparedStatement.setString(10, user.getSecurityAnswer());
             preparedStatement.setString(11, user.getFileName());
             preparedStatement.setInt(12, user.getId());
-
-
-
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+
             flag = true;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;
@@ -171,9 +182,11 @@ public class UserDao {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+
             flag = true;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;
@@ -188,10 +201,12 @@ public class UserDao {
             preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+
             flag = true;
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
 
         return flag;

@@ -13,12 +13,9 @@
 <body class="bg-warning">
 <%
     response.setHeader("Cache-Control", "no-cache, no-store");
-    session.removeAttribute("updateUserId");
     List<User> users = (List)session.getAttribute("users");
     User admin = (User)session.getAttribute("admin");
-    if(users == null || admin == null){
-        response.sendRedirect("index.jsp");
-    }
+    request.setAttribute("admin", admin);
 %>
 <%@ include file="header.jsp" %>
 <div class="container div-cont bg-secondary">
@@ -42,8 +39,8 @@
         <td><c:out value="${user.getEmail()}" /></td>
         <td><c:out value="${user.getRole()}" /></td>
         <td class="w-25">
-        <a href="viewServlet?userId=${user.getId()}&role=${user.getRole()}&adminId=${admin.getId()}" class="btn btn-warning py-1 view-user-btn">View</a>
-        <a href="deleteServlet?userId=${user.getId()}&adminId=${admin.getId()}" class="btn btn-warning py-1 remove-user-btn">Delete</a>
+        <a href="viewServlet?userId=${user.getId()}" class="btn btn-warning py-1 view-user-btn">View</a>
+        <a href="deleteServlet?userId=${user.getId()}" class="btn btn-warning py-1 remove-user-btn">Delete</a>
         </td>
       </tr>
       </c:forEach>

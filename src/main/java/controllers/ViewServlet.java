@@ -18,18 +18,21 @@ import java.util.List;
 
 public class ViewServlet extends HttpServlet {
 
+    private static final long serialVersionUID= -6601341627645607229L;
+
     private static final Logger logger = Logger.getLogger(ValidationServlet.class);
 
-    Base64.Decoder decoder = Base64.getDecoder();
+    private transient Base64.Decoder decoder = Base64.getDecoder();
     private UserService userService = new UserServiceImpl();
 
     private AddressService addressService = new AddressServiceImpl();
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("userId"));
-        int adminId = Integer.parseInt(req.getParameter("adminId"));
-        String role = req.getParameter("role");
-        User user = this.userService.getUserById(id);
+//        int adminId = Integer.parseInt(req.getParameter("adminId"));
+//        String role = req.getParameter("role");
         HttpSession session = req.getSession();
+        session.setAttribute("updateUserId", id);
+        User user = this.userService.getUserById(id);
         byte[] bytes = decoder.decode(user.getPassword());
         String decodedPassword = new String(bytes);
         logger.info(decodedPassword);
@@ -42,7 +45,7 @@ public class ViewServlet extends HttpServlet {
             List<Address> addresses = this.addressService.getAddressByUserId(id);
             session.setAttribute("user", user1);
             session.setAttribute("addresses", addresses);
-            resp.sendRedirect("view.jsp?adminId="+adminId+"&role="+role+"");
+            resp.sendRedirect("view.jsp");
 
 
     }
