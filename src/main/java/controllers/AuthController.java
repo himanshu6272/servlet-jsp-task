@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Address;
+import models.Constants;
 import models.User;
 import org.apache.log4j.Logger;
 import services.AddressService;
@@ -14,21 +15,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.*;
 
 @MultipartConfig
 public class AuthController extends HttpServlet {
+
     private static final long serialVersionUID= 2677845101220700857L;
     private static final Logger log = Logger.getLogger(AuthController.class);
     private UserService userService = new UserServiceImpl();
     private AddressService addressService = new AddressServiceImpl();
     private transient Base64.Decoder decoder = Base64.getDecoder();
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter("email");
+        Constants constants = new Constants();
+        String email = req.getParameter(constants.email);
         log.info(email);
-        String password = req.getParameter("password");
+        String password = req.getParameter(constants.password);
         log.info(password);
-        User user = this.userService.getUserByEmail(email);
+        User user = null;
+        try {
+            user = this.userService.getUserByEmail(email);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         log.info(user);
         log.info(user.getId());
         if (user.getId() == 0){
@@ -38,7 +48,7 @@ public class AuthController extends HttpServlet {
         String existingUserPassword = user.getPassword();
         log.info(existingUserPassword);
         byte[] bytes = decoder.decode(existingUserPassword);
-        String decodedPassword = new String(bytes);
+        String decodedPassword = new String(bytes, StandardCharsets.UTF_8);
         log.info(decodedPassword);
         User existingUser = new User(
                 user.getId(), user.getFirstName(), user.getLastName(), user.getMobile(), user.getEmail(),
@@ -47,8 +57,13 @@ public class AuthController extends HttpServlet {
         HttpSession session = req.getSession();
 
         if (password.equals(decodedPassword)){
-            if (existingUser.getRole().equals("ADMIN")){
-                List<User> users = this.userService.getAllUsers();
+            if (existingUser.getRole().equals(constants.ADMIN)){
+                List<User> users = null;
+                try {
+                    users = this.userService.getAllUsers();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 List<User> userList = new ArrayList<>();
                 for (int i = 0; i < users.size(); i++) {
                     if (users.get(i).getId() == existingUser.getId()){
@@ -56,17 +71,22 @@ public class AuthController extends HttpServlet {
                     }
                     userList.add(users.get(i));
                 }
-                session.setAttribute("users", userList);
-                session.setAttribute("loggedInUser", "admin");
-                session.setAttribute("admin", existingUser);
-                resp.getWriter().write("admin");
+                session.setAttribute(constants.users, userList);
+                session.setAttribute(constants.loggedInUser, constants.admin);
+                session.setAttribute(constants.admin, existingUser);
+                resp.getWriter().write(constants.admin);
             }else {
-                List<Address> addresses = this.addressService.getAddressByUserId(existingUser.getId());
-                session.setAttribute("user", existingUser);
-                session.setAttribute("addresses", addresses);
-                session.setAttribute("updateUserId", existingUser.getId());
-                session.setAttribute("loggedInUser", "user");
-                resp.getWriter().write("user");
+                List<Address> addresses = null;
+                try {
+                    addresses = this.addressService.getAddressByUserId(existingUser.getId());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                session.setAttribute(constants.user, existingUser);
+                session.setAttribute(constants.addresses, addresses);
+                session.setAttribute(constants.updateUserId, existingUser.getId());
+                session.setAttribute(constants.loggedInUser, constants.user);
+                resp.getWriter().write(constants.user);
             }
         }else {
             log.error("Invalid Credentials");

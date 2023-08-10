@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Constants;
 import models.User;
 import org.apache.log4j.Logger;
 import services.UserService;
@@ -9,47 +10,61 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ValidationServlet implements Filter {
     private final static Logger logger = Logger.getLogger(ValidationServlet.class);
     private UserService userService = new UserServiceImpl();
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+        Constants constants = new Constants();
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
-        Object objId = session.getAttribute("updateUserId");
+        Object objId = session.getAttribute(constants.updateUserId);
         int id = 0;
         if (objId == null){
             logger.info("New user");
         }else {
             id = (int) objId;
         }
-        String emailId = req.getParameter("email");
-        if (emailId==null && id != 0){
-            emailId = this.userService.getUserById(id).getEmail();
+        String emailId = req.getParameter(constants.email);
+        if (emailId.equals("") && id != 0){
+            try {
+                emailId = this.userService.getUserById(id).getEmail();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-        boolean firstname = req.getParameter("firstname").matches("^[A-Z,a-z]{2,8}$");
-        boolean lastname = req.getParameter("lastname").matches("^[A-Z,a-z]{2,8}$");
+        boolean firstname = req.getParameter(constants.firstname).matches("^[A-Z,a-z]{2,8}$");
+        boolean lastname = req.getParameter(constants.lastname).matches("^[A-Z,a-z]{2,8}$");
         boolean email = emailId.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-        boolean mobile = req.getParameter("mobile").matches("^[0-9]{1,11}$");
-        boolean password = req.getParameter("password").matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
-        String role = req.getParameter("role");
+        boolean mobile = req.getParameter(constants.mobile).matches("^[0-9]{1,11}$");
+        boolean password = req.getParameter(constants.password).matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+        String role = req.getParameter(constants.role);
         if (role == null){
-            role = this.userService.getUserById(id).getRole();
+            try {
+                role = this.userService.getUserById(id).getRole();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-        String gender = req.getParameter("gender");
-        String question = req.getParameter("security-que");
-        String answer = req.getParameter("security-answer");
-        Part profilePhoto = req.getPart("profile-photo");
+        String gender = req.getParameter(constants.gender);
+        String question = req.getParameter(constants.securityQuestion);
+        String answer = req.getParameter(constants.securityAnswer);
+        Part profilePhoto = req.getPart(constants.profilePhoto);
 
-        String[] street = req.getParameterValues("street");
-        String[] city = req.getParameterValues("city");
-        String[] state = req.getParameterValues("state");
-        String[] zip = req.getParameterValues("zip");
-        String[] country = req.getParameterValues("country");
+        String[] street = req.getParameterValues(constants.street);
+        String[] city = req.getParameterValues(constants.city);
+        String[] state = req.getParameterValues(constants.state);
+        String[] zip = req.getParameterValues(constants.zip);
+        String[] country = req.getParameterValues(constants.country);
 
 
-        User user = this.userService.getUserByEmail(emailId);
+        User user = null;
+        try {
+            user = this.userService.getUserByEmail(emailId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         String existEmail = user.getEmail();
         if (existEmail == null){
             existEmail = "existEmail";

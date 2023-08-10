@@ -183,7 +183,6 @@
   </div>
 </div>
 <script src="./assets/jquery/jQuery 3.6.4.js"></script>
-<script src="./assets/js/index.js"></script>
 <script src="./assets/js/validation.js"></script>
 <script src="./assets/js/view.js"></script>
 <script src="./assets/jquery/jquery-ui.js"></script>
