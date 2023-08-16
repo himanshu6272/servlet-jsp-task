@@ -5,8 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="./assets/css/style.css">
+
 </head>
 
 <body class="bg-warning">
@@ -16,14 +17,13 @@
     User admin = (User)session.getAttribute("admin");
     request.setAttribute("admin", admin);
 %>
-
 <%@ include file="header.jsp" %>
 <div class="container div-cont bg-secondary">
   <div class="row">
-    <div class="bg-dark w-100 p-2">
-        <h3 class="text-warning d-inline ml-4" style="margin-right:200px;">Admin Dashboard</h3>
-        <input type="text" id="myInput" placeholder="Search for names.." class="ml-5">
-    </div>
+  <div class="bg-dark w-100 p-2">
+  <h3 class="text-warning d-inline ml-4" style="margin-right:200px;">Admin Dashboard</h3>
+  <input type="text" id="myInput" placeholder="Search for names.." class="ml-5">
+  </div>
     <table class="table text-warning text-center border-bottom border-white" id="myTable">
       <tr>
         <th style="width:10%;">Sr. No.</th>

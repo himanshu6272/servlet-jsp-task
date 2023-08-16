@@ -3,16 +3,16 @@ package services;
 import dao.UserDao;
 import models.User;
 import org.apache.log4j.Logger;
+import utils.ConnectionProvider;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl implements UserService{
 
     public static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
-    public UserDao userDao = new UserDao();
-    public int registerUser(User user) throws SQLException {
+    public UserDao userDao = new UserDao(ConnectionProvider.getConnection());
+    public int registerUser(User user) {
         int status = 0;
         if (userDao.saveUser(user)){
             logger.info("user saved successfully");
@@ -24,23 +24,23 @@ public class UserServiceImpl implements UserService{
         return status;
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         List<User> users = this.userDao.getAll();
         return users;
     }
 
 
-    public User getUserByEmail(String email) throws SQLException {
+    public User getUserByEmail(String email) {
         User user = this.userDao.getByEmail(email);
         return user;
     }
 
-    public User getUserById(int id) throws SQLException {
+    public User getUserById(int id) {
         User user = this.userDao.getById(id);
         return user;
     }
 
-    public void updateUser(User user) throws SQLException {
+    public void updateUser(User user) {
         if(this.userDao.update(user)){
             logger.info("user updated successfully");
         }else {
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    public void updateUserPassword(User user) throws SQLException {
+    public void updateUserPassword(User user) {
         if(this.userDao.updatePassword(user)){
             logger.info("password changed successfully");
         }else {
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    public void deleteUser(int id) throws SQLException {
+    public void deleteUser(int id) {
         if (this.userDao.delete(id)){
             logger.info("user deleted successfully");
         }else {

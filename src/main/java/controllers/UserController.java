@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Address;
-import models.Constants;
 import models.User;
 import services.AddressService;
 import services.AddressServiceImpl;
@@ -12,8 +11,6 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -26,9 +23,8 @@ public class UserController extends HttpServlet {
     public AddressService addressService = new AddressServiceImpl();
     private transient Base64.Encoder encoder = Base64.getEncoder();
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Constants constants = new Constants();
         HttpSession session = req.getSession();
-        Object userObjId = session.getAttribute(constants.updateUserId);
+        Object userObjId = session.getAttribute("updateUserId");
         int updateUserId = 0;
         if (userObjId != null){
             updateUserId = (int) userObjId;
@@ -37,122 +33,76 @@ public class UserController extends HttpServlet {
 //        ---------getting all form fields---------
 
 
-        String firstname = req.getParameter(constants.firstname);
-        String lastname = req.getParameter(constants.lastname);
-        String email = req.getParameter(constants.email);
+        String firstname = req.getParameter("firstname");
+        String lastname = req.getParameter("lastname");
+        String email = req.getParameter("email");
         if (email == null){
-            try {
-                email = this.userService.getUserById(updateUserId).getEmail();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            email = this.userService.getUserById(updateUserId).getEmail();
         }
-        String mobile = req.getParameter(constants.mobile);
-        String password = req.getParameter(constants.password);
-        String encodedPassword = encoder.encodeToString(password.getBytes(Charset.forName("UTF-8")));
-        String role = req.getParameter(constants.role);
+        String mobile = req.getParameter("mobile");
+        String password = req.getParameter("password");
+        String encodedPassword = encoder.encodeToString(password.getBytes());
+        String role = req.getParameter("role");
         if (role == null){
-            try {
-                role = this.userService.getUserById(updateUserId).getRole();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            role = this.userService.getUserById(updateUserId).getRole();
         }
-        String dob = req.getParameter(constants.dob);
-        String gender = req.getParameter(constants.gender);
-        String question = req.getParameter(constants.securityQuestion);
-        String answer = req.getParameter(constants.securityAnswer);
-        Part profilePhoto = req.getPart(constants.profilePhoto);
+        String dob = req.getParameter("dob");
+        String gender = req.getParameter("gender");
+        String question = req.getParameter("security-que");
+        String answer = req.getParameter("security-answer");
+        Part profilePhoto = req.getPart("profile-photo");
         String fileName = profilePhoto.getSubmittedFileName();
 
 //        ---------getting all address fields---------
 
-        String[] street = req.getParameterValues(constants.street);
-        String[] city = req.getParameterValues(constants.city);
-        String[] state = req.getParameterValues(constants.state);
-        String[] zip = req.getParameterValues(constants.zip);
-        String[] country = req.getParameterValues(constants.country);
+        String[] street = req.getParameterValues("street");
+        String[] city = req.getParameterValues("city");
+        String[] state = req.getParameterValues("state");
+        String[] zip = req.getParameterValues("zip");
+        String[] country = req.getParameterValues("country");
 
         if(userObjId == null){
             User user = new User(firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
-            try {
-                if (this.userService.registerUser(user) == 1){
-                    String path = getServletContext().getRealPath("") + "profilePhotos";
-                    profilePhoto.write(path+File.separator+fileName);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (this.userService.registerUser(user) == 1){
+                String path = getServletContext().getRealPath("") + "profilePhotos";
+                profilePhoto.write(path+File.separator+fileName);
             }
-            int userId = 0;
-            try {
-                userId = this.userService.getUserByEmail(email).getId();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            int userId = this.userService.getUserByEmail(email).getId();
             for (int i=0;i< street.length;i++){
                 Address address = new Address(userId, street[i], city[i], state[i], zip[i], country[i]);
-                try {
-                    this.addressService.saveAddress(address);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                this.addressService.saveAddress(address);
             }
         resp.getWriter().write("done");
         }else {
-            String[] addressId = req.getParameterValues(constants.addressId);
+            String[] addressId = req.getParameterValues("addressId");
             User user = new User(updateUserId, firstname,lastname,mobile,email,role,dob,gender,encodedPassword, question, answer, fileName);
-            try {
-                this.userService.updateUser(user);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            this.userService.updateUser(user);
             String path = getServletContext().getRealPath("") + "profilePhotos";
+//            File file = new File(path);
             profilePhoto.write(path+File.separator+fileName);
             for (int i = 0; i < street.length; i++) {
 
                 if (addressId == null) {
                         Address address = new Address(updateUserId, street[i], city[i], state[i], zip[i], country[i]);
-                    try {
                         this.addressService.saveAddress(address);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
+                    } else {
                         if (Objects.equals(addressId[i], "")){
                             Address address = new Address(updateUserId, street[i], city[i], state[i], zip[i], country[i]);
-                            try {
-                                this.addressService.saveAddress(address);
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
+                            this.addressService.saveAddress(address);
                         }else {
                             int aId = Integer.parseInt(addressId[i]);
                             Address address = new Address(aId, updateUserId, street[i], city[i], state[i], zip[i], country[i]);
-                            try {
-                                this.addressService.updateAddress(address);
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
+                            this.addressService.updateAddress(address);
                         }
                     }
                 }
 
-            session.removeAttribute(constants.user);
-            session.removeAttribute(constants.addresses);
-            User user1 = null;
-            try {
-                user1 = this.userService.getUserById(updateUserId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            List<Address> addresses = null;
-            try {
-                addresses = this.addressService.getAddressByUserId(updateUserId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            session.setAttribute(constants.user, user1);
-            session.setAttribute(constants.addresses, addresses);
+            session.removeAttribute("user");
+            session.removeAttribute("addresses");
+            User user1 = this.userService.getUserById(updateUserId);
+            List<Address> addresses = this.addressService.getAddressByUserId(updateUserId);
+            session.setAttribute("user", user1);
+            session.setAttribute("addresses", addresses);
             resp.getWriter().write("updated");
         }
 

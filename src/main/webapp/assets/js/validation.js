@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function validate() {
   let flag = false;
 
   let firstName = function () {
@@ -57,7 +57,6 @@ $(document).ready(function () {
       return true;
     }
   };
-
   let emailAddress = function () {
     let emailExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let email = $("#email-address").val();
@@ -74,7 +73,6 @@ $(document).ready(function () {
       return true;
     }
   };
-
   let dateOfBirth = function () {
     let dob = $("#dob").val();
     let currentDate = new Date().toISOString().split("T")[0];
@@ -89,6 +87,18 @@ $(document).ready(function () {
       return true;
     }
   };
+//  let resAddress = function () {
+//    let address = $("#address").val();
+//    if (address == "" || address == undefined) {
+//      $("#addressHelp")
+//        .html("please enter the address!")
+//        .addClass("text-danger");
+//      return false;
+//    } else {
+//      $("#addressHelp").empty();
+//      return true;
+//    }
+//  };
 
   let securityQue = function () {
     let answer = $("#security-answer").val();
@@ -102,7 +112,6 @@ $(document).ready(function () {
       return true;
     }
   };
-
   let pwd = function () {
     let password = $("#password").val();
     let passwordExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
@@ -121,7 +130,6 @@ $(document).ready(function () {
       return true;
     }
   };
-
   let cnfPassword = function () {
     let password = $("#password").val();
     let cnfPwd = $("#cnf-password").val();
@@ -204,10 +212,10 @@ $(document).ready(function () {
         }
   };
 
+
   $(".gender").click(function () {
       $("#genderHelp").empty();
   });
-
  $(".role").click(function () {
       $("#roleHelp").empty();
   });
@@ -270,12 +278,12 @@ $(document).ready(function () {
                    });
 
                    // Function to show the error popup
-    function showErrorPopup(message) {
-        $("#errorPopup").html(message).show();
-        setTimeout(function () {
-            $("#errorPopup").hide();
-        }, 3000);
-    }
+                   function showErrorPopup(message) {
+                       $("#errorPopup").html(message).show();
+                       setTimeout(function () {
+                           $("#errorPopup").hide();
+                       }, 3000);
+                    }
 
     $("#profile-photo").on('change', function(){
         let inputFile = $(this);
@@ -292,6 +300,9 @@ $(document).ready(function () {
           return false;
         }
     })
+
+
+
 
   $("#fname").blur(firstName);
   $("#lname").blur(lastName);
@@ -314,49 +325,6 @@ $(document).ready(function () {
   $("#submit-btn").click(cnfPassword);
   $("#submit-btn").click(profilePhoto);
   $("#submit-btn").click(securityQuestion);
-
-$("#add-address-btn").click(function(){
-      $(this).addClass("d-none");
-      $("#address").removeClass("d-none");
-      $("#addressHelp").empty();
-
-    })
-
-    $(".update-user-btn").click(function(){
-        $("#dashboard-btn").removeClass("d-none");
-    })
-
-    $("#cancel-address-btn").click(function(){
-      $("#address").addClass("d-none");
-      $("#add-address-btn").removeClass("d-none");
-    })
-
-        var id = 1;
-        $("#save-address-btn").click(function(){
-            let street = $("#inputStreet").val();
-            let city = $("#inputCity").val();
-            let state = $("#inputState").val();
-            let zip = $("#inputZip").val();
-            let country = $("#inputCountry").val();
-            let addElement = '<div class="address border border-black p-2 m-3"><div class="d-flex mb-2"><input hidden name="addressId"><div class="d-inline mr-2"><label>Street</label><br><input class="street" name="street" value="'+street+
-            '"><br></div><div class="d-inline mr-2"><label>City</label><br><input class="city" name="city" value="'+city+
-            '"><br></div><div class="d-inline mr-2"><label>State</label><br><input class="state" name="state" value="'+state+
-            '"><br></div><div class="d-inline mr-2"><label>Zip</label><br><input class="zip" name="zip" value="'+zip+
-            '"><br></div><div class="d-inline mr-2"><label>Country</label><br><input class="country" name="country" value="'+country+
-            '"><br></div></div><button type="button" class="btn btn-primary d-block remove-address-btn mr-1">Remove</button><small class="form-text addressesHelp"></small></div>';
-            $("#addresses").append(addElement);
-            $("#inputStreet").val("");
-            $("#inputCity").val("");
-            $("#inputState").val("");
-            $("#inputZip").val("");
-            $("#inputCountry").val("");
-
-            id = id + 1;
-        })
-
-$(document).on("click", ".remove-address-btn", function() {
-    $(this).closest(".address").remove();
-});
 
 
 });

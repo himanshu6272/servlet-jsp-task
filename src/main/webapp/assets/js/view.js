@@ -7,7 +7,8 @@ $(document).ready(function(){
         $(".remove-address-btn").removeAttr("disabled");
         $("#submit-btn").removeAttr("disabled");
         $("#add-address-btn").removeClass("d-none");
-   })
+    })
+
 
     $("#login-btn").html("Logout").removeAttr("href").attr("href", "logoutServlet");
     $("#register-btn").remove();
@@ -15,5 +16,7 @@ $(document).ready(function(){
     $("#add-address-btn").click(function(){
         $("#address").removeClass("d-none");
     })
+
+
 
 })

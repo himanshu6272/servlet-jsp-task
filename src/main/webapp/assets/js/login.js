@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function validate() {
   let flag = false;
 
   let emailAddress = function () {
@@ -37,58 +37,12 @@ $(document).ready(function() {
         }
       };
 
-    $("#login-form").on('submit', function (event) {
-                      event.preventDefault();
-                      form = new FormData(this);
-                      console.log(form);
-                      $.ajax({
-                          url: 'loginServlet',
-                          type: 'POST',
-                          data: form,
-                          success: function (data, textStatus, jqXHR) {
-                              console.log(data);
-                              showErrorPopup(data);
-                              if(data.trim() === 'admin'){
-                                  $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
-                                  let message = "LoggedIn Successfully";
-                                  showErrorPopup(message);
-                                  setTimeout(function () {
-                                       window.location.href = "admin.jsp";
-                                   }, 3000);
-
-                              }else if(data.trim() === 'user'){
-                                  $("#errorPopup").removeClass("bg-danger").addClass("bg-success");
-                                  let message = "LoggedIn Successfully";
-                                  showErrorPopup(message);
-                                  setTimeout(function () {
-                                       window.location.href = "view.jsp";
-                                   }, 3000);
-                              }
-                              else{
-                                  showErrorPopup(data);
-                              }
-                          },
-                          error: function (jqXHR, textStatus, errorThrown) {
-                              console.log(jqXHR);
-                          },
-                          processData: false,
-                          contentType: false
-                      });
-                  });
-  // Function to show the error popup
-  function showErrorPopup(message) {
-      $("#errorPopup").text(message).show();
-      setTimeout(function () {
-          $("#errorPopup").hide();
-      }, 3000);
-  }
 
 
     $("#email-address").blur(emailAddress);
     $("#password").blur(pwd);
     $("#submit-btn").click(emailAddress);
     $("#submit-btn").click(pwd);
-
 
 
 

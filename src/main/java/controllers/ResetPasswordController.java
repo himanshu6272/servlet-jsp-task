@@ -1,6 +1,5 @@
 package controllers;
 
-import models.Constants;
 import models.User;
 import org.apache.log4j.Logger;
 import services.UserService;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.SQLException;
 import java.util.Base64;
 @MultipartConfig
 public class ResetPasswordController extends HttpServlet {
@@ -29,20 +26,16 @@ public class ResetPasswordController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Constants constants = new Constants();
-        String email = req.getParameter(constants.email);
+        resp.setContentType("text/html");
+        String email = req.getParameter("email");
         logger.info(email);
-        String password = req.getParameter(constants.password);
-        String encodedPassword = encoder.encodeToString(password.getBytes(Charset.forName("UTF-8")));
+        String password = req.getParameter("password");
+        String encodedPassword = encoder.encodeToString(password.getBytes());
         if (email.equals("null")){
             resp.getWriter().println("Reset link has been expired, please generate new one!!");
         }else {
             User user = new User(email, encodedPassword);
-            try {
-                this.userService.updateUserPassword(user);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            this.userService.updateUserPassword(user);
             resp.getWriter().println("reset");
         }
     }
