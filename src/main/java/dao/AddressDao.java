@@ -2,11 +2,13 @@ package dao;
 
 import models.Address;
 import org.apache.log4j.Logger;
+import utils.ConnectionProvider;
 
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +16,18 @@ public class AddressDao implements Serializable {
 
     private static final long serialVersionUID = -1893173580745472716L;
     private static final Logger logger = Logger.getLogger(UserDao.class);
-    private transient Connection connection;
-    public AddressDao(Connection connection){
-        this.connection = connection;
-    }
+    private transient Connection connection = ConnectionProvider.getConnection();
+//    public AddressDao(Connection connection){
+//        this.connection = connection;
+//    }
 
-    public boolean save(Address address){
-        boolean flag = false;
 
+    public boolean save(Address address) throws SQLException {
+
+        PreparedStatement preparedStatement = null;
         try {
             String query = "insert into address(user_id,street, city, state, zip, country) values(?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement= this.connection.prepareStatement(query);
             preparedStatement.setInt(1, address.getUserId());
             preparedStatement.setString(2, address.getStreet());
             preparedStatement.setString(3, address.getCity());
@@ -35,20 +38,25 @@ public class AddressDao implements Serializable {
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
-            flag = true;
-        }catch (Exception e){
-            logger.error(e);
+        }finally{
+            try {
+                preparedStatement.close();
+            }catch (Exception e){
+                logger.error(e);
+            }
+
         }
 
-        return flag;
+        return true;
 
     }
 
-    public List<Address> getByUserId(int userId){
+    public List<Address> getByUserId(int userId) throws SQLException {
         List<Address> addresses = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
         try {
             String query = "select * from address where user_id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, userId);
             ResultSet set = preparedStatement.executeQuery();
             while (set.next()){
@@ -62,37 +70,43 @@ public class AddressDao implements Serializable {
                 address.setCountry(set.getString(7));
                 addresses.add(address);
             }
-
-            preparedStatement.close();
-
-        }catch (Exception e){
-            logger.error(e);
+        }finally {
+            try {
+                preparedStatement.close();
+            }catch (Exception e){
+                logger.error(e);
+            }
         }
 
         return addresses;
     }
 
-    public boolean delete(int id){
+    public boolean delete(int id) throws SQLException {
         boolean flag = false;
+        PreparedStatement preparedStatement = null;
         try {
             String query = "delete from address where id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement= this.connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            preparedStatement.close();
             flag = true;
-        }catch (Exception e){
-            logger.error(e);
+        }finally {
+            try {
+                preparedStatement.close();
+            }catch (Exception e){
+                logger.error(e);
+            }
         }
 
         return flag;
     }
 
-    public  boolean update(Address address){
+    public  boolean update(Address address) throws SQLException {
         boolean flag = false;
+        PreparedStatement preparedStatement = null;
         try{
             String query = "update address set user_id=?, street=?, city=?, state=?, zip=?, country=? where id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement= this.connection.prepareStatement(query);
             preparedStatement.setInt(1, address.getUserId());
             preparedStatement.setString(2, address.getStreet());
             preparedStatement.setString(3, address.getCity());
@@ -102,11 +116,13 @@ public class AddressDao implements Serializable {
             preparedStatement.setInt(7, address.getId());
             preparedStatement.executeUpdate();
 
-            preparedStatement.close();
-
             flag = true;
-        }catch (Exception e){
-            logger.error(e);
+        }finally {
+            try {
+                preparedStatement.close();
+            }catch (Exception e){
+                logger.error(e);
+            }
         }
         return flag;
     }
