@@ -10,7 +10,7 @@
 <body class="bg-warning">
 <div id="errorPopup" class="alert bg-danger" role="alert"></div>
 <%
-String email = (String)session.getAttribute("email");
+String email = request.getParameter("email");
 %>
 <%@ include file="header.jsp" %>
 <div class="container div-cont">

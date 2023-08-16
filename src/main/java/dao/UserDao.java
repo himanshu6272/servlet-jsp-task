@@ -2,13 +2,11 @@ package dao;
 
 import models.User;
 import org.apache.log4j.Logger;
-import utils.ConnectionProvider;
 
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,18 +15,18 @@ public class UserDao implements Serializable {
     private static final long serialVersionUID = -4360092092454209390L;
     private static final Logger logger = Logger.getLogger(UserDao.class);
 
-    private transient Connection connection = ConnectionProvider.getConnection();
+    private transient Connection connection;
 
-//    public UserDao(Connection connection) {
-//        this.connection = connection;
-//    }
+    public UserDao(Connection connection) {
+        this.connection = connection;
+    }
 
-    public boolean saveUser(User user) throws SQLException {
+    public boolean saveUser(User user) {
         boolean flag = false;
-        PreparedStatement preparedStatement = null;
+
         try {
             String query = "insert into user(firstname, lastname, mobile, email, role, gender, dob, password, question, answer, filename) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            preparedStatement= this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getMobile());
@@ -42,26 +40,21 @@ public class UserDao implements Serializable {
             preparedStatement.setString(11, user.getFileName());
 
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
 
             flag = true;
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
         return flag;
     }
 
-    public User getByEmail(String email) throws SQLException {
+    public User getByEmail(String email){
         User user = new User();
-        PreparedStatement preparedStatement = null;
         try {
             String query = "select * from user where email=?";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, email);
             ResultSet set = preparedStatement.executeQuery();
             if (set.next()){
@@ -78,28 +71,23 @@ public class UserDao implements Serializable {
                 user.setSecurityAnswer(set.getString(11));
                 user.setFileName(set.getString(12));
             }
+            preparedStatement.close();
 
 
-
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
 
         return user;
     }
 
-    public List<User> getAll() throws SQLException {
+    public List<User> getAll(){
 
         List<User> users = new ArrayList<>();
-        PreparedStatement preparedStatement = null;
         try {
             String query = "select * from user";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             ResultSet set = preparedStatement.executeQuery();
             while (set.next()){
                 User user = new User(
@@ -118,23 +106,18 @@ public class UserDao implements Serializable {
                 );
                 users.add(user);
             }
-
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+            preparedStatement.close();
+        }catch (Exception e){
+            logger.error(e);
         }
         return users;
     }
 
-    public User getById(int id) throws SQLException {
+    public User getById(int id){
         User user = new User();
-        PreparedStatement preparedStatement = null;
         try {
             String query = "select * from user where id=?";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet set = preparedStatement.executeQuery();
             if (set.next()){
@@ -151,28 +134,23 @@ public class UserDao implements Serializable {
                 user.setSecurityAnswer(set.getString(11));
                 user.setFileName(set.getString(12));
             }
+            preparedStatement.close();
 
 
-
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
         return user;
 
     }
 
-    public boolean update(User user) throws SQLException {
+    public boolean update(User user){
         boolean flag = false;
-        PreparedStatement preparedStatement = null;
 
         try {
             String query = "update user set firstname=?, lastname=?, mobile=?, email=?, role=?, gender=?, dob=?, password=?, question=?, answer=?, filename=? where id=?";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getMobile());
@@ -186,62 +164,49 @@ public class UserDao implements Serializable {
             preparedStatement.setString(11, user.getFileName());
             preparedStatement.setInt(12, user.getId());
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
 
             flag = true;
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
         return flag;
     }
 
-    public boolean delete(int id) throws SQLException {
+    public boolean delete(int id){
         boolean flag = false;
-        PreparedStatement preparedStatement = null;
+
         try {
             String query = "delete from user where id=?";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
 
             flag = true;
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
         return flag;
     }
 
-    public boolean updatePassword(User user) throws SQLException {
+    public boolean updatePassword(User user){
         boolean flag = false;
-        PreparedStatement preparedStatement = null;
 
         try {
             String query = "update user set password=? where email=?";
-            preparedStatement = this.connection.prepareStatement(query);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
 
             flag = true;
 
-        }finally {
-            try {
-                preparedStatement.close();
-            }catch (Exception e){
-                logger.error(e);
-            }
+        }catch (Exception e){
+            logger.error(e);
         }
 
         return flag;

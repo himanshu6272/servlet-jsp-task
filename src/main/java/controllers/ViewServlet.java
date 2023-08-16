@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Address;
-import models.Constants;
 import models.User;
 import org.apache.log4j.Logger;
 import services.AddressService;
@@ -14,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
@@ -30,18 +27,14 @@ public class ViewServlet extends HttpServlet {
 
     private AddressService addressService = new AddressServiceImpl();
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Constants constants = new Constants();
-        int id = Integer.parseInt(req.getParameter(constants.userId));
+        int id = Integer.parseInt(req.getParameter("userId"));
+//        int adminId = Integer.parseInt(req.getParameter("adminId"));
+//        String role = req.getParameter("role");
         HttpSession session = req.getSession();
-        session.setAttribute(constants.updateUserId, id);
-        User user = null;
-        try {
-            user = this.userService.getUserById(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        session.setAttribute("updateUserId", id);
+        User user = this.userService.getUserById(id);
         byte[] bytes = decoder.decode(user.getPassword());
-        String decodedPassword = new String(bytes, StandardCharsets.UTF_8);
+        String decodedPassword = new String(bytes);
         logger.info(decodedPassword);
 
             User user1 = new User(
@@ -49,14 +42,9 @@ public class ViewServlet extends HttpServlet {
                     user.getRole(), user.getDob(), user.getGender(), decodedPassword, user.getSecurityQuestion(), user.getSecurityAnswer(), user.getFileName()
             );
 
-        List<Address> addresses = null;
-        try {
-            addresses = this.addressService.getAddressByUserId(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        session.setAttribute(constants.users, user1);
-            session.setAttribute(constants.addresses, addresses);
+            List<Address> addresses = this.addressService.getAddressByUserId(id);
+            session.setAttribute("user", user1);
+            session.setAttribute("addresses", addresses);
             resp.sendRedirect("view.jsp");
 
 
